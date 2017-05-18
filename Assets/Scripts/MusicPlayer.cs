@@ -45,13 +45,8 @@ public class MusicPlayer : MonoBehaviour
     void Update()
     {
         if (!source.isPlaying && !paused && !start)
-        {
-            if (shuffleMode)
-                RandomSong();
-            else
             {
-                NextSong();
-            }
+            NextSong();
         }
     }
 
@@ -79,20 +74,14 @@ public class MusicPlayer : MonoBehaviour
 
     public void Play()
     {
-        if (!start)
-        {
+       
             if (paused)
                 Resume();
             else
             {
                 Pause();
             }
-        }
-        else
-        {
-            PlayCurrent();
-            start = false;
-        }
+
     }
 
     public void PreviousSong()
@@ -164,12 +153,17 @@ public class MusicPlayer : MonoBehaviour
 
     void PlayCurrent()
     {
+        if (start)
+        {
+            start = false;
+        }
         buttonUI[0].sprite = playButtonSprites[1];
         source.clip = clips[currentIndex];
         currSongText.text = source.clip.name.Remove(source.clip.name.Length - 4);
         if (backwards == 0)
             trackList.Add(currentIndex);
         source.Play();
+        //StartCoroutine(WaitForSong(source.clip.length));
         prevIndex = currentIndex;
     }
 
@@ -183,8 +177,16 @@ public class MusicPlayer : MonoBehaviour
     void Resume()
     {
         buttonUI[0].sprite = playButtonSprites[1];
-        source.UnPause();
         paused = false;
+        if (!start)
+        {
+            source.UnPause();
+        }
+        else
+        {
+            PlayCurrent();
+        }
+
     }
 
     void ReloadSounds()
@@ -205,7 +207,7 @@ public class MusicPlayer : MonoBehaviour
                 //sFile.FullName = sFile.FullName.Remove(sFile.FullName.Length - 4) + ".wav";
                 //soundFiles.Remove(sFile);
                 //soundFiles.Add(info.GetFiles("*.wav").First());
-                Debug.Log("WebCamDevice DirectSoundDeviceInfo it!");
+                //Debug.Log("WebCamDevice DirectSoundDeviceInfo it!");
             }
         }
         soundFiles = info.GetFiles()
@@ -231,6 +233,15 @@ public class MusicPlayer : MonoBehaviour
             }
         }
     }
+
+    //IEnumerator WaitForSong(float songLength)
+    //{
+    //    yield return new WaitForSeconds(songLength);
+    //    if (!paused && !start)
+    //    {
+    //        NextSong();
+    //    }
+    //}
 
     IEnumerator LoadFile(string path)
     {
