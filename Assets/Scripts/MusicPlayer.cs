@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using NAudio.Wave;
 using UnityEngine.UI;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class MusicPlayer : MonoBehaviour
 {
@@ -49,6 +51,8 @@ public class MusicPlayer : MonoBehaviour
             NextSong();
         }
     }
+
+
 
     //void OnGUI()
     //{
